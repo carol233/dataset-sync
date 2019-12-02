@@ -81,7 +81,8 @@ class Analysis:
         titlermv = "RmvDroid Dataset"
         titlegenome = "Genome Dataset"
 
-        fig = plt.figure()  # 创建画布
+        plt.figure(figsize=(12, 12))  # 创建画布
+        fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
         for item in datasets:
             dex_v = self.select_dex(item)
             opseq_v = self.select_opcode(item)
@@ -98,27 +99,25 @@ class Analysis:
             columns = ["Dex", "Opcode seq", "API call"]
 
             if item == "drebin":
-                plt.subplot(221)  # 创建作图区域
                 title = titledrebin
-                ax = fig.add_subplot(2, 2, 1)
+                df = pd.DataFrame(all_data, columns=columns)
+                df.plot.box(title=title, ax=ax1)
             elif item == "AMD":
-                plt.subplot(222)
                 title = titleamd
-                ax = fig.add_subplot(2, 2, 2)
+                df = pd.DataFrame(all_data, columns=columns)
+                df.plot.box(title=title, ax=ax2)
             elif item == "rmvdroid":
-                plt.subplot(223)
                 title = titlermv
-                ax = fig.add_subplot(2, 2, 3)
+                df = pd.DataFrame(all_data, columns=columns)
+                df.plot.box(title=title, ax=ax3)
             else:
-                plt.subplot(224)
                 title = titlegenome
-                ax = fig.add_subplot(2, 2, 4)
+                df = pd.DataFrame(all_data, columns=columns)
+                df.plot.box(title=title, ax=ax4)
 
-            df = pd.DataFrame(all_data, columns=columns)
-            df.plot.box(title=title, ax=ax)
-
-        # plt.grid(linestyle="--", alpha=0.3)
-        plt.show()
+        plt.tight_layout()
+        plt.savefig("boxplot.pdf")
+        plt.close()
 
 
     def close(self):
